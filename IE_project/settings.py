@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts.apps.AccountsConfig',
     'rest_framework_simplejwt.token_blacklist',
-    'drf_api_logger',
+    # 'drf_api_logger',
+    "rest_framework_tracking",
 ]
 
 REST_FRAMEWORK = {
@@ -57,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
+    # 'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'IE_project.urls'
@@ -133,4 +134,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
-DRF_API_LOGGER_DATABASE = True
+# DRF_API_LOGGER_DATABASE = True
