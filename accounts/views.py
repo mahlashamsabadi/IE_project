@@ -31,12 +31,110 @@ class CustomTokenObtainPairView(LoggingMixin, TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
-class DhcpConfig(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsDhcpManager ,]
+class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
+    permission_classes = [IsDhcpManager,]
+
+    def get(self, request):
+        self.check_object_permissions(request , request.user)
+        return_data = {}
+        #change password
+        pwd = "fatemeh"
+        cmd_start = "sudo /etc/init.d/dhcp start"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+
+        return_data["startOutput"] = output.stdout
+        return_data["startError"] = output.stderr
+        return_data = json.dumps(return_data, indent = 4)
+
+        return Response(return_data)
+
+class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
+    permission_classes = [IsDhcpManager,]
+
+    def get(self, request):
+        self.check_object_permissions(request , request.user)
+        return_data = {}
+        #change password
+        pwd = "fatemeh"
+        cmd_start = "sudo /etc/init.d/dhcp stop"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+
+        return_data["stopOutput"] = output.stdout
+        return_data["stopError"] = output.stderr
+        return_data = json.dumps(return_data, indent = 4)
+
+
+class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
+    permission_classes = [IsDhcpManager,]
+
+    return_data ={} 
+
+    output = subprocess.run('systemctl status dhcp', shell=True, capture_output=True, text=True)
+
+    return_data["statusError"] = output.stderr
+
+        
+    if  output.stdout != "":
+
+        s = output.stdout
+        load_s = ""
+
+        index = s.find("Loaded: ") + 8
+        while s[index]!= " " :
+            load_s += s[index]
+            index = index+1
+
+        return_data["Loaded"] = load_s
+
+        active_s = ""
+
+        index = s.find("Active: ") + 8
+
+        while s[index]!= " " :
+            active_s += s[index]
+            index = index+1
+
+        return_data["Active"] = active_s
+
+        process_s = ""
+
+        index = s.find("Process: ") + 9
+
+        while s[index]!= " " :
+
+            process_s += s[index]
+            index = index+1
+
+
+        return_data["Process"] = process_s
+
+
+
+        PID_s = ""
+
+        index = s.find("Main PID: ") + 10
+        while s[index]!= " " :
+            PID_s += s[index]
+            index = index+1
+
+
+        return_data["Main PID: "] =PID_s
+
+        return_data = json.dumps(return_data, indent = 4)
+        return Response(return_data)
+
+
+
+
+class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
+    permission_classes = [IsDhcpManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
         return Response("helloooo")
+
+
+
 
 class MailConfigStart(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsMailManager,]
@@ -44,9 +142,12 @@ class MailConfigStart(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         #it should change to server password!
-        output = subprocess.run('sudo /etc/init.d/postfix start && echo fatemeh', shell=True, capture_output=True, text=True)
-        return_data ={} 
+        pwd = "fatemeh"
+        cmd = "sudo /etc/init.d/postfix start"
 
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd), shell=True, capture_output=True, text=True)
+
+        return_data ={}
         return_data["startOutput"] = output.stdout
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
@@ -58,7 +159,10 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         #it should change to server password!
-        output = subprocess.run('sudo /etc/init.d/postfix stop && echo fatemeh', shell=True, capture_output=True, text=True)
+        pwd = "fatemeh"
+        cmd = "sudo /etc/init.d/postfix stop"
+
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd), shell=True, capture_output=True, text=True)
         return_data ={} 
         return_data["stopOutput"] = output.stdout
         return_data["stopError"] = output.stderr

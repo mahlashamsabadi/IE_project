@@ -5,9 +5,19 @@ import json
 json_data = {}
 
 out = subprocess.run('sudo systemctl status postfix', shell=True, capture_output=True, text=True)
-#out2 = subprocess.run('/etc/init.d/postfix start', shell=True, capture_output=True, text=True)
 
-#out3 = subprocess.run('/etc/init.d/postfix stop', shell=True, capture_output=True, text=True)
+
+pwd = "fatemeh" # write your password here!
+cmd = "sudo /etc/init.d/postfix start"
+
+out2 = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd), shell=True, capture_output=True, text=True)
+print("the output2 is",out2.stdout, out2.stderr)
+
+cmd2 = 'sudo /etc/init.d/postfix stop'
+out3 = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd2), shell=True, capture_output=True, text=True)
+print("the output3 is",out3.stdout)
+
+
 s = out.stdout
 load_s = ""
 
