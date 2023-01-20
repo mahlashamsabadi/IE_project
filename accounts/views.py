@@ -38,11 +38,10 @@ class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
         self.check_object_permissions(request , request.user)
         return_data = {}
         #change password
-        pwd = "fatemeh"
-        cmd_start = "sudo /etc/init.d/dhcp start"
+        pwd = "mahla_sh"
+        cmd_start = "sudo service isc-dhcp-server start"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
 
-        return_data["startOutput"] = output.stdout
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
 
@@ -55,11 +54,10 @@ class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
         self.check_object_permissions(request , request.user)
         return_data = {}
         #change password
-        pwd = "fatemeh"
-        cmd_start = "sudo /etc/init.d/dhcp stop"
+        pwd = "mahla_sh"
+        cmd_start = "sudo service isc-dhcp-server stop"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
 
-        return_data["stopOutput"] = output.stdout
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
 
@@ -69,7 +67,10 @@ class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
 
     return_data ={} 
 
-    output = subprocess.run('systemctl status dhcp', shell=True, capture_output=True, text=True)
+    pwd = "mahla_sh"
+    cmd_status = "sudo service isc-dhcp-server status"
+    output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_status), shell=True, capture_output=True, text=True)
+
 
     return_data["statusError"] = output.stderr
 
@@ -142,7 +143,7 @@ class MailConfigStart(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         #it should change to server password!
-        pwd = "fatemeh"
+        pwd = "mahla_sh"
         cmd = "sudo /etc/init.d/postfix start"
 
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd), shell=True, capture_output=True, text=True)
@@ -159,7 +160,7 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         #it should change to server password!
-        pwd = "fatemeh"
+        pwd = "mahla_sh"
         cmd = "sudo /etc/init.d/postfix stop"
 
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd), shell=True, capture_output=True, text=True)
