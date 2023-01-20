@@ -39,24 +39,24 @@ class DhcpConfig(LoggingMixin , generics.GenericAPIView):
         return Response("helloooo")
 
 class MailConfigStart(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsMailManager ,]
+    permission_classes = [IsMailManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
-
-        output = subprocess.run('sudo /etc/init.d/postfix start', shell=True, capture_output=True, text=True)
+        #it should change to server password!
+        output = subprocess.run('sudo /etc/init.d/postfix start && echo fatemeh', shell=True, capture_output=True, text=True)
         return_data ={} 
         return_data["start"] = output.stdout
         return_data = json.dumps(return_data, indent = 4)
         return Response(return_data)
 
 class MailConfigStop(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsMailManager ,]
+    permission_classes = [IsMailManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
-
-        output = subprocess.run('sudo /etc/init.d/postfix stop', shell=True, capture_output=True, text=True)
+        #it should change to server password!
+        output = subprocess.run('sudo /etc/init.d/postfix stop && echo fatemeh', shell=True, capture_output=True, text=True)
         return_data ={} 
         return_data["stop"] = output.stdout
         return_data = json.dumps(return_data, indent = 4)
@@ -64,12 +64,12 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
 
 
 class MailConfigStatus(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsMailManager ,]
+    permission_classes = [IsMailManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
 
-        output = subprocess.run('sudo systemctl status postfix', shell=True, capture_output=True, text=True)
+        output = subprocess.run('systemctl status postfix', shell=True, capture_output=True, text=True)
 
         return_data ={} 
         s = output.stdout

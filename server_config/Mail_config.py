@@ -5,9 +5,9 @@ import json
 json_data = {}
 
 out = subprocess.run('sudo systemctl status postfix', shell=True, capture_output=True, text=True)
-#out2 = subprocess.run('sudo /etc/init.d/postfix start', shell=True, capture_output=True, text=True)
+#out2 = subprocess.run('/etc/init.d/postfix start', shell=True, capture_output=True, text=True)
 
-#out3 = subprocess.run('sudo /etc/init.d/postfix stop', shell=True, capture_output=True, text=True)
+#out3 = subprocess.run('/etc/init.d/postfix stop', shell=True, capture_output=True, text=True)
 s = out.stdout
 load_s = ""
 
