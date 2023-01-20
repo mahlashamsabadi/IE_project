@@ -46,7 +46,9 @@ class MailConfigStart(LoggingMixin , generics.GenericAPIView):
         #it should change to server password!
         output = subprocess.run('sudo /etc/init.d/postfix start && echo fatemeh', shell=True, capture_output=True, text=True)
         return_data ={} 
-        return_data["start"] = output.stdout
+
+        return_data["startOutput"] = output.stdout
+        return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
         return Response(return_data)
 
@@ -58,7 +60,8 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
         #it should change to server password!
         output = subprocess.run('sudo /etc/init.d/postfix stop && echo fatemeh', shell=True, capture_output=True, text=True)
         return_data ={} 
-        return_data["stop"] = output.stdout
+        return_data["stopOutput"] = output.stdout
+        return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
         return Response(return_data)
 
@@ -68,60 +71,65 @@ class MailConfigStatus(LoggingMixin , generics.GenericAPIView):
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
+        return_data ={} 
 
         output = subprocess.run('systemctl status postfix', shell=True, capture_output=True, text=True)
 
-        return_data ={} 
-        s = output.stdout
-        load_s = ""
+        return_data["statusError"] = output.stderr
 
-        index = s.find("Loaded: ") + 8
-        while s[index]!= " " :
-             load_s += s[index]
-             index = index+1
+        
+        if  output.stdout != "":
 
-        return_data["Loaded"] = load_s
+            s = output.stdout
+            load_s = ""
 
-        active_s = ""
+            index = s.find("Loaded: ") + 8
+            while s[index]!= " " :
+                 load_s += s[index]
+                 index = index+1
 
-        index = s.find("Active: ") + 8
-        while s[index]!= " " :
-             active_s += s[index]
-             index = index+1
+            return_data["Loaded"] = load_s
 
-        return_data["Active"] = active_s
+            active_s = ""
 
-        process_s = ""
+            index = s.find("Active: ") + 8
+            while s[index]!= " " :
+                 active_s += s[index]
+                 index = index+1
 
-        index = s.find("Process: ") + 9
-        while s[index]!= " " :
-             process_s += s[index]
-             index = index+1
+            return_data["Active"] = active_s
 
+            process_s = ""
 
-        return_data["Process"] = process_s
-
-
-
-        PID_s = ""
-
-        index = s.find("Main PID: ") + 10
-        while s[index]!= " " :
-             PID_s += s[index]
-             index = index+1
+            index = s.find("Process: ") + 9
+            while s[index]!= " " :
+                 process_s += s[index]
+                 index = index+1
 
 
-        return_data["Main PID: "] =PID_s
-
-        CPU_s = ""
-
-        index = s.find("CPU: ") + 5
-        while s[index]!= "\n" :
-             CPU_s += s[index]
-             index = index+1
+            return_data["Process"] = process_s
 
 
-        return_data["CPU: "] =CPU_s
+
+            PID_s = ""
+
+            index = s.find("Main PID: ") + 10
+            while s[index]!= " " :
+                 PID_s += s[index]
+                 index = index+1
+
+
+            return_data["Main PID: "] =PID_s
+
+            CPU_s = ""
+
+            index = s.find("CPU: ") + 5
+            while s[index]!= "\n" :
+                 CPU_s += s[index]
+                 index = index+1
+
+
+            return_data["CPU: "] =CPU_s
 
         return_data = json.dumps(return_data, indent = 4)
         return Response(return_data)
