@@ -62,67 +62,67 @@ class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
         return_data = json.dumps(return_data, indent = 4)
 
 
-class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsDhcpManager,]
+# class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
+#     permission_classes = [IsDhcpManager,]
 
-    return_data ={} 
+#     return_data ={} 
 
-    pwd = "mahla_sh"
-    cmd_status = "sudo service isc-dhcp-server status"
-    output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_status), shell=True, capture_output=True, text=True)
+#     pwd = "mahla_sh"
+#     cmd_status = "sudo service isc-dhcp-server status"
+#     output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_status), shell=True, capture_output=True, text=True)
 
 
-    return_data["statusError"] = output.stderr
+#     return_data["statusError"] = output.stderr
 
         
-    if  output.stdout != "":
+#     if  output.stdout != "":
 
-        s = output.stdout
-        load_s = ""
+#         s = output.stdout
+#         load_s = ""
 
-        index = s.find("Loaded: ") + 8
-        while s[index]!= " " :
-            load_s += s[index]
-            index = index+1
+#         index = s.find("Loaded: ") + 8
+#         while s[index]!= " " :
+#             load_s += s[index]
+#             index = index+1
 
-        return_data["Loaded"] = load_s
+#         return_data["Loaded"] = load_s
 
-        active_s = ""
+#         active_s = ""
 
-        index = s.find("Active: ") + 8
+#         index = s.find("Active: ") + 8
 
-        while s[index]!= " " :
-            active_s += s[index]
-            index = index+1
+#         while s[index]!= " " :
+#             active_s += s[index]
+#             index = index+1
 
-        return_data["Active"] = active_s
+#         return_data["Active"] = active_s
 
-        process_s = ""
+#         process_s = ""
 
-        index = s.find("Process: ") + 9
+#         index = s.find("Process: ") + 9
 
-        while s[index]!= " " :
+#         while s[index]!= " " :
 
-            process_s += s[index]
-            index = index+1
-
-
-        return_data["Process"] = process_s
+#             process_s += s[index]
+#             index = index+1
 
 
-
-        PID_s = ""
-
-        index = s.find("Main PID: ") + 10
-        while s[index]!= " " :
-            PID_s += s[index]
-            index = index+1
+#         return_data["Process"] = process_s
 
 
-        return_data["Main PID: "] =PID_s
 
-        return_data = json.dumps(return_data, indent = 4)
-        return Response(return_data)
+#         PID_s = ""
+
+#         index = s.find("Main PID: ") + 10
+#         while s[index]!= " " :
+#             PID_s += s[index]
+#             index = index+1
+
+
+#         return_data["Main PID: "] =PID_s
+
+#         return_data = json.dumps(return_data, indent = 4)
+#         return Response(return_data)
 
 
 

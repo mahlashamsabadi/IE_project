@@ -29,4 +29,5 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # and everything else you want to send in the response
         data.update({'username': self.user.username})
+        data.update({'type': self.user.type})
         return data
