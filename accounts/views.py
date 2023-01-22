@@ -279,8 +279,12 @@ def getLogs(user):
     cursor.execute("SELECT * FROM rest_framework_tracking_apirequestlog")
     userLogs = []
     logs = cursor.fetchall()
-    for i in logs:
-        if (i[15] == user.username):
+    if user.is_superuser == 1:
+        for i in logs:
             userLogs.append(i)
+    else:
+        for i in logs:
+            if (i[15] == user.username):
+                userLogs.append(i)
     return userLogs
    
