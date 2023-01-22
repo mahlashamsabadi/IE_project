@@ -17,5 +17,11 @@ urlpatterns = [
     path('mail/start/', views.MailConfigStart.as_view(), name='mail_start'),
     path('mail/stop/', views.MailConfigStop.as_view(), name='mail_stop'),
     path('mail/status/', views.MailConfigStatus.as_view(), name='mail_status'),
+    #Web Server Configuration
+    path('web/start/', views.WebServerConfigStart.as_view(), name='web_start'),
+    path('web/stop/', views.WebServerConfigStop.as_view(), name='web_stop'),
+    # path('web/status/', views.WebServerConfigStatus.as_view(), name='web_status'),
+
+
     
 ]

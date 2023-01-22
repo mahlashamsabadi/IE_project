@@ -135,8 +135,6 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
         return Response("helloooo")
 
 
-
-
 class MailConfigStart(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsMailManager,]
 
@@ -239,6 +237,36 @@ class MailConfigStatus(LoggingMixin , generics.GenericAPIView):
         return_data = json.dumps(return_data, indent = 4)
         return Response(return_data)
 
+class WebServerConfigStart(LoggingMixin , generics.GenericAPIView):
+    permission_classes = [IsWebManager,]
+
+    def get(self, request):
+        self.check_object_permissions(request , request.user)
+        return_data = {}
+        #change password
+        pwd = "mahla_sh"
+        cmd_start = "sudo systemctl start nginx"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+
+        return_data["startError"] = output.stderr
+        return_data = json.dumps(return_data, indent = 4)
+
+        return Response(return_data)
+
+class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
+    permission_classes = [IsWebManager,]
+
+    def get(self, request):
+        self.check_object_permissions(request , request.user)
+        return_data = {}
+        #change password
+        pwd = "mahla_sh"
+        cmd_start = "sudo systemctl stop nginx"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+
+        return_data["stopError"] = output.stderr
+        return_data = json.dumps(return_data, indent = 4)
+
 
 class ShowLogs(generics.GenericAPIView):
     permission_classes = [IsAuthenticated ,]
@@ -265,7 +293,6 @@ class ShowLogs(generics.GenericAPIView):
             data['username_persistent'] = i[15]
             data1.append(data)
         return Response(data1)
-        
         
 def getLogs(user):
 
