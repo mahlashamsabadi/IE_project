@@ -12,7 +12,7 @@ print("output is", output_start.stdout, "error is",output_start.stderr)
 
 
 #Stop Dhcp
-cmd_stop = "sudo sudo service isc-dhcp-server stop"
+cmd_stop = "sudo service isc-dhcp-server stop"
 output_stop = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
 print("output is", output_stop.stdout, "error is",output_stop.stderr)
 
