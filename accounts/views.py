@@ -14,7 +14,7 @@ import json
 
 class Register(LoggingMixin , generics.GenericAPIView):
     def post(self , request):
-        srz_data = UserRegister(data=request.POST)
+        srz_data = UserRegisterSerializer(data=request.POST)
         data={}
         if srz_data.is_valid():
             account = srz_data.save()

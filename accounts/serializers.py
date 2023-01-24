@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenVerifySerializer
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError, UntypedToken
-class UserRegister(serializers.ModelSerializer):
+class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
