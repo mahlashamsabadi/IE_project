@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # 'drf_api_logger',
     "rest_framework_tracking",
     'corsheaders',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = {
