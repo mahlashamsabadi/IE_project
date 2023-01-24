@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated , IsAdminUser
 import subprocess
 import json
 
-class Register(LoggingMixin , generics.GenericAPIView):
+class Register(LoggingMixin, APIView):
     def post(self , request):
         srz_data = UserRegisterSerializer(data=request.POST)
         data={}
@@ -21,8 +21,11 @@ class Register(LoggingMixin , generics.GenericAPIView):
             data['username'] = account.username
             data['email'] = account.email
             data['type'] = account.type
+
             refresh = RefreshToken.for_user(account)
+            data['refresh'] = str(refresh)
             data['access'] = str(refresh.access_token)
+            
             return Response(data)
         return Response(srz_data.errors)
 

@@ -9,6 +9,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ("email","password" , "username" , "type")
 
+        extera_kwargs = {
+            'password': {'write_only': True}
+        }
+
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
