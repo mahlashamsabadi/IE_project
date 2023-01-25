@@ -47,6 +47,10 @@ class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
 
+        #IDSC
+        cmd_stop = "mutt -s 'DHCP server Started'  admin@UIIE.LOC < /tmp/Mail_dhcp_start.txt"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
+
         return Response(return_data)
 
 class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
@@ -62,6 +66,13 @@ class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
 
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+
+        #IDSC
+        cmd_stop = "mutt -s 'DHCP server Stopped'  admin@UIIE.LOC < /tmp/Mail_dhcp_stop.txt"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
+
+        return Response(return_data)
+
 
 
 class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
@@ -191,6 +202,11 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
         write_file.close()
         return_data["change_range"] = "The ip Range successfully changed."
         return_data = json.dumps(return_data, indent = 4)
+
+        #IDSC
+        cmd_stop = "mutt -s 'DHCP server Started'  admin@UIIE.LOC < /tmp/Mail_dhcp_Change_Ip_range.txt"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
+
         return Response(return_data, status = 200)
 
 
@@ -209,6 +225,11 @@ class MailConfigStart(LoggingMixin , generics.GenericAPIView):
         return_data["startOutput"] = output.stdout
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+
+
+        #IDSC
+        cmd_stop = "mutt -s 'Mail server Started'  admin@UIIE.LOC < /tmp/Mail_Mail_start.txt"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
         return Response(return_data)
 
 class MailConfigStop(LoggingMixin , generics.GenericAPIView):
@@ -225,6 +246,10 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
         return_data["stopOutput"] = output.stdout
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+
+        #IDSC
+        cmd_stop = "mutt -s 'Mail server Stopped'  admin@UIIE.LOC < /tmp/Mail_Mail_stop.txt"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
         return Response(return_data)
 
 
@@ -310,7 +335,9 @@ class WebServerConfigStart(LoggingMixin , generics.GenericAPIView):
 
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
-
+        #IDSC
+        cmd_stop = "mutt -s 'Web server Started'  admin@UIIE.LOC < /tmp/Mail_Web_start.txt"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
         return Response(return_data)
 
 class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
@@ -327,6 +354,9 @@ class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
 
+        #IDSC
+        cmd_stop = "mutt -s 'Web server Stopped'  admin@UIIE.LOC < /tmp/Mail_Web_stop.txt"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
         return Response(return_data)
 
 
@@ -447,6 +477,10 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
 
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+
+        #IDSC
+        cmd_stop = "mutt -s 'Home directory changed'  admin@UIIE.LOC < /tmp/Mail_Web_Change_dir.txt"
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
 
         return Response(return_data)
 
