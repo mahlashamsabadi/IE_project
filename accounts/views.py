@@ -12,22 +12,19 @@ from rest_framework.permissions import IsAuthenticated , IsAdminUser
 import subprocess
 import json
 
-class Register(LoggingMixin, APIView):
-    def post(self , request):
-        srz_data = UserRegisterSerializer(data=request.POST)
-        data={}
-        if srz_data.is_valid():
-            account = srz_data.save()
+class Register(LoggingMixin ,APIView):
+    def post(self, request):
+        serialized_data = UserRegisterSerializer(data=request.data)
+        data = {}
+        if serialized_data.is_valid():
+            account = serialized_data.save()
             data['username'] = account.username
             data['email'] = account.email
             data['type'] = account.type
-
             refresh = RefreshToken.for_user(account)
-            data['refresh'] = str(refresh)
             data['access'] = str(refresh.access_token)
-            
             return Response(data)
-        return Response(srz_data.errors)
+        return Response(serialized_data.errors)
 
 class CustomTokenObtainPairView(LoggingMixin, TokenObtainPairView):
     # Replace the serializer with your custom

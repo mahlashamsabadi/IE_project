@@ -4,11 +4,9 @@ from .models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenVerifySerializer
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError, UntypedToken
 class UserRegisterSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
-        fields = ("email","password" , "username" , "type")
-
+        fields = ('username', 'email', 'password' , 'type')
         extera_kwargs = {
             'password': {'write_only': True}
         }

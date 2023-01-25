@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -140,9 +140,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
 # DRF_API_LOGGER_DATABASE = True
 
-CORS_ALLOWED_ORIGINS = [
-"http://127.0.0.1:8000"
-]
+# CORS_ALLOWED_ORIGINS = [
+# "http://127.0.0.1:8000"
+# ]
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
+}
 
 CORS_ALLOW_METHODS = [
 'DELETE',

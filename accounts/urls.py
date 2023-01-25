@@ -7,7 +7,7 @@ from . import views
 urlpatterns = [
 
     path('register/', views.Register.as_view(), name='user_register'),
-    path('api/token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('showLog/', views.ShowLogs.as_view(), name='showLog'),
     # path('dhcp/', views.DhcpConfig.as_view(), name='dhcp'),
     path('dhcp/start/', views.DhcpConfigStart.as_view(), name='dhcp_start'),
