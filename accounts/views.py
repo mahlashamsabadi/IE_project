@@ -11,6 +11,8 @@ from sqlite3 import Error
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
 import subprocess
 import json
+import fileinput
+import re
 
 class Register(LoggingMixin ,APIView):
     def post(self, request):
@@ -128,13 +130,68 @@ class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
 
 
 
-
-class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
+# ?
+class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView): 
     permission_classes = [IsDhcpManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
-        return Response("helloooo")
+        #retrun error if stat_ip and end_ip are not correct
+        new_start_ip = request.data.startip
+        new_end_ip = request.data.endip
+        return_data = {}
+        word = 'range'
+        word = word
+        strt_ip = ""
+        end_ip = ""
+
+        #retrun Error if we could not open file
+        with open('/etc/dhcp/dhcpd.conf','r+') as fp:
+
+        
+        lines = fp.readlines()
+        filedata = fp.read()
+
+        for line in lines:
+
+            s = str(line)
+            if line.find(word) != -1:
+
+                index = s.find("range ") + 6
+                
+                while s[index]!= " " :
+                    strt_ip += s[index]
+                    index = index+1
+                index += 1
+                while s[index]!= ";" :
+                    end_ip += s[index]
+                    index = index+1
+                if strt_ip != "" and end_ip !="":
+                    break
+
+        if strt_ip == "" or end_ip =="":
+            return_data["change_range"] = "Can not found the range definition in config file!"
+            return_data = json.dumps(return_data, indent = 4)
+            return Response(return_data, status=500)
+            
+
+        file = open('/etc/dhcp/dhcpd.conf','r+')
+        replaced_content = ""
+        for line in file:
+            new_line = line 
+
+            if line.find("range "+strt_ip+" "+ end_ip+";") != -1:
+                new_line = "range "+ new_start_ip + " " + new_end_ip + ";\n"
+
+            replaced_content = replaced_content + new_line
+        file.close()
+        write_file = open('/etc/dhcp/dhcpd.conf', "w")
+
+        write_file.write(replaced_content)
+        write_file.close()
+        return_data["change_range"] = "The ip Range successfully changed."
+        return_data = json.dumps(return_data, indent = 4)
+        return Response(return_data, status = 200)
 
 
 class MailConfigStart(LoggingMixin , generics.GenericAPIView):
