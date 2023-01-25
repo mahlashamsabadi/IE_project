@@ -1,0 +1,5 @@
+Dear admin,
+Hello,
+This is to inform you that
+there has been a change in the setting of the DHCP service,
+and the IP range has been changed.
