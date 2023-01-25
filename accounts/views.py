@@ -40,9 +40,8 @@ class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
         self.check_object_permissions(request , request.user)
         return_data = {}
         #change password
-        pwd = "mahla_sh"
         cmd_start = "sudo service isc-dhcp-server start"
-        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+        output = subprocess.run(cmd_start, shell=True, capture_output=True, text=True)
 
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
@@ -59,10 +58,9 @@ class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         return_data = {}
-        #change password
-        pwd = "mahla_sh"
-        cmd_start = "sudo service isc-dhcp-server stop"
-        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+
+        cmd_stop = "sudo service isc-dhcp-server stop"
+        output = subprocess.run(cmd_stop, shell=True, capture_output=True, text=True)
 
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
@@ -82,9 +80,8 @@ class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
 
         return_data ={} 
 
-        pwd = "mahla_sh"
         cmd_status = "sudo service isc-dhcp-server status"
-        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_status), shell=True, capture_output=True, text=True)
+        output = subprocess.run(cmd_status, shell=True, capture_output=True, text=True)
 
 
         return_data["statusError"] = output.stderr
@@ -220,10 +217,10 @@ class MailConfigStart(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         #it should change to server password!
-        pwd = "mahla_sh"
+
         cmd = "sudo /etc/init.d/postfix start"
 
-        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd), shell=True, capture_output=True, text=True)
+        output = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
         return_data ={}
         return_data["startOutput"] = output.stdout
@@ -241,11 +238,9 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
-        #it should change to server password!
-        pwd = "mahla_sh"
         cmd = "sudo /etc/init.d/postfix stop"
 
-        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd), shell=True, capture_output=True, text=True)
+        output = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         return_data ={} 
         return_data["stopOutput"] = output.stdout
         return_data["stopError"] = output.stderr
@@ -332,10 +327,9 @@ class WebServerConfigStart(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         return_data = {}
-        #change password
-        pwd = "mahla_sh"
+
         cmd_start = "sudo systemctl start nginx"
-        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+        output = subprocess.run(cmd_start, shell=True, capture_output=True, text=True)
 
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
@@ -351,9 +345,9 @@ class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
         self.check_object_permissions(request , request.user)
         return_data = {}
         #change password
-        pwd = "mahla_sh"
-        cmd_start = "sudo systemctl stop nginx"
-        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+    
+        cmd_stop = "sudo systemctl stop nginx"
+        output = subprocess.run(cmd_stop, shell=True, capture_output=True, text=True)
 
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
@@ -370,8 +364,6 @@ class WebServerConfigStatus(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         return_data = {}
-        #change password
-        pwd = "mahla_sh"
         cmd_status = "systemctl status nginx"
         output = subprocess.run(cmd_status, shell=True, capture_output=True, text=True)
 
@@ -474,10 +466,9 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         return_data = {}
-        #change password
-        pwd = "mahla_sh"
-        cmd_start = "sudo systemctl change nginx root to"+ request.data.dir
-        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+        
+        cmd = "sudo systemctl change nginx root to"+ request.data.dir
+        output = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
