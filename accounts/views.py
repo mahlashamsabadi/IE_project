@@ -149,30 +149,30 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
         with open('/etc/dhcp/dhcpd.conf','r+') as fp:
 
         
-        lines = fp.readlines()
-        filedata = fp.read()
+            lines = fp.readlines()
+            filedata = fp.read()
 
-        for line in lines:
+            for line in lines:
 
-            s = str(line)
-            if line.find(word) != -1:
+                s = str(line)
+                if line.find(word) != -1:
 
-                index = s.find("range ") + 6
-                
-                while s[index]!= " " :
-                    strt_ip += s[index]
-                    index = index+1
-                index += 1
-                while s[index]!= ";" :
-                    end_ip += s[index]
-                    index = index+1
-                if strt_ip != "" and end_ip !="":
-                    break
+                    index = s.find("range ") + 6
+                    
+                    while s[index]!= " " :
+                        strt_ip += s[index]
+                        index = index+1
+                    index += 1
+                    while s[index]!= ";" :
+                        end_ip += s[index]
+                        index = index+1
+                    if strt_ip != "" and end_ip !="":
+                        break
 
-        if strt_ip == "" or end_ip =="":
-            return_data["change_range"] = "Can not found the range definition in config file!"
-            return_data = json.dumps(return_data, indent = 4)
-            return Response(return_data, status=500)
+            if strt_ip == "" or end_ip =="":
+                return_data["change_range"] = "Can not found the range definition in config file!"
+                return_data = json.dumps(return_data, indent = 4)
+                return Response(return_data, status=500)
             
 
         file = open('/etc/dhcp/dhcpd.conf','r+')
