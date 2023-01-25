@@ -434,6 +434,21 @@ class WebServerConfigStatus(LoggingMixin , generics.GenericAPIView):
 
         return_data = json.dumps(return_data, indent = 4)
 
+class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
+    permission_classes = [IsWebManager,]
+
+    def get(self, request):
+        self.check_object_permissions(request , request.user)
+        return_data = {}
+        #change password
+        pwd = "mahla_sh"
+        cmd_start = "sudo systemctl change nginx root to"+ request.data.dir
+        output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_start), shell=True, capture_output=True, text=True)
+
+        return_data["stopError"] = output.stderr
+        return_data = json.dumps(return_data, indent = 4)
+
+        return Response(return_data)
 
 class ShowLogs(generics.GenericAPIView):
     permission_classes = [IsAuthenticated ,]
