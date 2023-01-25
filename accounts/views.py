@@ -48,7 +48,7 @@ class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
         return_data = json.dumps(return_data, indent = 4)
 
         #IDSC
-        cmd_stop = "mutt -s 'DHCP server Started'  admin@UIIE.LOC < /tmp/Mail_dhcp_start.txt"
+        cmd_stop = "mutt -s 'DHCP server Started'  admin@UIIE.LOC <  /var/www/Mails/Mail_dhcp_start.txt"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
 
         return Response(return_data)
@@ -68,7 +68,7 @@ class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
         return_data = json.dumps(return_data, indent = 4)
 
         #IDSC
-        cmd_stop = "mutt -s 'DHCP server Stopped'  admin@UIIE.LOC < /tmp/Mail_dhcp_stop.txt"
+        cmd_stop = "mutt -s 'DHCP server Stopped'  admin@UIIE.LOC <  /var/www/Mails/Mail_dhcp_stop.txt"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
 
         return Response(return_data)
@@ -192,7 +192,7 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
             new_line = line 
 
             if line.find("range "+strt_ip+" "+ end_ip+";") != -1:
-                new_line = "range "+ new_start_ip + " " + new_end_ip + ";\n"
+                new_line = "  range "+ new_start_ip + " " + new_end_ip + ";\n"
 
             replaced_content = replaced_content + new_line
         file.close()
@@ -204,8 +204,12 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
         return_data = json.dumps(return_data, indent = 4)
 
         #IDSC
-        cmd_stop = "mutt -s 'DHCP server Started'  admin@UIIE.LOC < /tmp/Mail_dhcp_Change_Ip_range.txt"
+        cmd_stop = "mutt -s 'DHCP server Started'  admin@UIIE.LOC <  /var/www/Mails/Mail_dhcp_Change_Ip_range.txt"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
+
+        #Restart DHCP
+        cmd_restart = "sudo service isc-dhcp-server restart"
+        output = subprocess.run(cmd_restart, shell=True, capture_output=True, text=True)
 
         return Response(return_data, status = 200)
 
@@ -228,7 +232,7 @@ class MailConfigStart(LoggingMixin , generics.GenericAPIView):
 
 
         #IDSC
-        cmd_stop = "mutt -s 'Mail server Started'  admin@UIIE.LOC < /tmp/Mail_Mail_start.txt"
+        cmd_stop = "mutt -s 'Mail server Started'  admin@UIIE.LOC <  /var/www/Mails/Mail_Mail_start.txt"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
         return Response(return_data)
 
@@ -248,7 +252,7 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
         return_data = json.dumps(return_data, indent = 4)
 
         #IDSC
-        cmd_stop = "mutt -s 'Mail server Stopped'  admin@UIIE.LOC < /tmp/Mail_Mail_stop.txt"
+        cmd_stop = "mutt -s 'Mail server Stopped'  admin@UIIE.LOC <  /var/www/Mails/Mail_Mail_stop.txt"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
         return Response(return_data)
 
@@ -336,7 +340,7 @@ class WebServerConfigStart(LoggingMixin , generics.GenericAPIView):
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
         #IDSC
-        cmd_stop = "mutt -s 'Web server Started'  admin@UIIE.LOC < /tmp/Mail_Web_start.txt"
+        cmd_stop = "mutt -s 'Web server Started'  admin@UIIE.LOC < /var/www/Mails/Mail_Web_start.txt"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
         return Response(return_data)
 
@@ -355,7 +359,7 @@ class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
         return_data = json.dumps(return_data, indent = 4)
 
         #IDSC
-        cmd_stop = "mutt -s 'Web server Stopped'  admin@UIIE.LOC < /tmp/Mail_Web_stop.txt"
+        cmd_stop = "mutt -s 'Web server Stopped'  admin@UIIE.LOC <  /var/www/Mails/Mail_Web_stop.txt"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
         return Response(return_data)
 
@@ -479,7 +483,7 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
         return_data = json.dumps(return_data, indent = 4)
 
         #IDSC
-        cmd_stop = "mutt -s 'Home directory changed'  admin@UIIE.LOC < /tmp/Mail_Web_Change_dir.txt"
+        cmd_stop = "mutt -s 'Home directory changed'  admin@UIIE.LOC <  /var/www/Mails/Mail_Web_Change_dir.txt"
         output = subprocess.run('echo {} | sudo -S {}'.format(pwd, cmd_stop), shell=True, capture_output=True, text=True)
 
         return Response(return_data)
