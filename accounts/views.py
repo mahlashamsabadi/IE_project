@@ -13,6 +13,7 @@ import subprocess
 import json
 import fileinput
 import re
+import ast
 
 class Register(LoggingMixin ,APIView):
     def post(self, request):
@@ -45,12 +46,13 @@ class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
 
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
 
         #IDSC
         cmd_mail = "mutt -s 'DHCP server Started'  admin@UIIE.LOC <  /var/www/Mails/Mail_dhcp_start.txt"
         output = subprocess.run(cmd_mail, shell=True, capture_output=True, text=True)
 
-        return Response(return_data)
+        return Response(dict_data)
 
 class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsDhcpManager,]
@@ -64,12 +66,13 @@ class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
 
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
 
         #IDSC
         cmd_mail = "mutt -s 'DHCP server Stopped'  admin@UIIE.LOC <  /var/www/Mails/Mail_dhcp_stop.txt"
         output = subprocess.run(cmd_mail, shell=True, capture_output=True, text=True)
 
-        return Response(return_data)
+        return Response(dict_data)
 
 
 
@@ -134,7 +137,8 @@ class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
             return_data["Main PID"] =Pid_s
 
         return_data = json.dumps(return_data, indent = 4)
-        return Response(return_data)
+        dict_data = ast.literal_eval(return_data)
+        return Response(dict_data)
 
 
 
@@ -208,6 +212,7 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
         write_file.close()
         return_data["change_range"] = "The ip Range successfully changed."
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
 
         #IDSC
         cmd_mail = "mutt -s 'IP range changed'  admin@UIIE.LOC <  /var/www/Mails/Mail_dhcp_Change_Ip_range.txt"
@@ -217,7 +222,7 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
         cmd_restart = "sudo service isc-dhcp-server restart"
         output = subprocess.run(cmd_restart, shell=True, capture_output=True, text=True)
 
-        return Response(return_data, status = 200)
+        return Response(dict_data, status = 200)
 
 
 class MailConfigStart(LoggingMixin , generics.GenericAPIView):
@@ -235,12 +240,13 @@ class MailConfigStart(LoggingMixin , generics.GenericAPIView):
         return_data["startOutput"] = output.stdout
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
 
 
         #IDSC
         cmd_mail = "mutt -s 'Mail server Started'  admin@UIIE.LOC <  /var/www/Mails/Mail_Mail_start.txt"
         output = subprocess.run(cmd_mail, shell=True, capture_output=True, text=True)
-        return Response(return_data)
+        return Response(dict_data)
 
 class MailConfigStop(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsMailManager,]
@@ -254,11 +260,12 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
         return_data["stopOutput"] = output.stdout
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
 
         #IDSC
         cmd_mail = "mutt -s 'Mail server Stopped'  admin@UIIE.LOC <  /var/www/Mails/Mail_Mail_stop.txt"
         output = subprocess.run(cmd_mail, shell=True, capture_output=True, text=True)
-        return Response(return_data)
+        return Response(dict_data)
 
 
 class MailConfigStatus(LoggingMixin , generics.GenericAPIView):
@@ -328,7 +335,8 @@ class MailConfigStatus(LoggingMixin , generics.GenericAPIView):
             return_data["CPU"] =cpu_s
 
         return_data = json.dumps(return_data, indent = 4)
-        return Response(return_data)
+        dict_data = ast.literal_eval(return_data)
+        return Response(dict_data)
 
 class WebServerConfigStart(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsWebManager,]
@@ -342,10 +350,11 @@ class WebServerConfigStart(LoggingMixin , generics.GenericAPIView):
 
         return_data["startError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
         #IDSC
         cmd_mail = "mutt -s 'Web server Started'  admin@UIIE.LOC < /var/www/Mails/Mail_Web_start.txt"
         output = subprocess.run(cmd_mail, shell=True, capture_output=True, text=True)
-        return Response(return_data)
+        return Response(dict_data)
 
 class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsWebManager,]
@@ -360,11 +369,12 @@ class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
 
         return_data["stopError"] = output.stderr
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
 
         #IDSC
         cmd_mail = "mutt -s 'Web server Stopped'  admin@UIIE.LOC <  /var/www/Mails/Mail_Web_stop.txt"
         output = subprocess.run(cmd_mail, shell=True, capture_output=True, text=True)
-        return Response(return_data)
+        return Response(dict_data)
 
 
 class WebServerConfigStatus(LoggingMixin , generics.GenericAPIView):
@@ -468,6 +478,7 @@ class WebServerConfigStatus(LoggingMixin , generics.GenericAPIView):
 
 
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
 
 class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsWebManager,]
@@ -498,8 +509,9 @@ class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
 
         return_data["HomeDir"] = current_Dir
         return_data = json.dumps(return_data, indent = 4)
+        dict_data = ast.literal_eval(return_data)
 
-        return Response(return_data)
+        return Response(dict_data)
 
 class ShowLogs(generics.GenericAPIView):
     permission_classes = [IsAuthenticated ,]
