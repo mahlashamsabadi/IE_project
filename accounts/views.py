@@ -461,22 +461,35 @@ class WebServerConfigStatus(LoggingMixin , generics.GenericAPIView):
 
         return_data = json.dumps(return_data, indent = 4)
 
-class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
+class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsWebManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
         return_data = {}
         
-        cmd = "sudo systemctl change nginx root to"+ request.data.dir
-        output = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        word = 'root'
 
-        return_data["stopError"] = output.stderr
+        with open('/etc/nginx/sites-available/Internet-engineering-proj.conf','r+') as fp:
+
+            # read all lines in a list
+            lines = fp.readlines()
+            filedata = fp.read()
+            current_Dir = ""
+            for line in lines:
+                # check if string present on a current line
+                s = str(line)
+                if line.find(word) != -1:
+
+                    index = s.find("root ") + 5
+                    
+                    while s[index]!= ";" :
+                        current_Dir += s[index]
+                        index = index+1
+                    break
+
+        return_data["HomeDir"] = current_Dir
         return_data = json.dumps(return_data, indent = 4)
-
-        #IDSC
-        cmd_mail = "mutt -s 'Home directory changed'  admin@UIIE.LOC <  /var/www/Mails/Mail_Web_Change_dir.txt"
-        output = subprocess.run(cmd_mail, shell=True, capture_output=True, text=True)
 
         return Response(return_data)
 
