@@ -13,6 +13,7 @@ urlpatterns = [
     path('dhcp/start/', views.DhcpConfigStart.as_view(), name='dhcp_start'),
     path('dhcp/stop/', views.DhcpConfigStop.as_view(), name='dhcp_stop'),
     path('dhcp/changeIpRange/', views.DhcpConfigChangeIpRange.as_view(), name='dhcp_change_ip_range'),
+    path('dhcp/status/', views.DhcpConfigStatus.as_view(), name='dhcp_status'),
     #Mail configuration
     path('mail/start/', views.MailConfigStart.as_view(), name='mail_start'),
     path('mail/stop/', views.MailConfigStop.as_view(), name='mail_stop'),
@@ -20,7 +21,7 @@ urlpatterns = [
     #Web Server Configuration
     path('web/start/', views.WebServerConfigStart.as_view(), name='web_start'),
     path('web/stop/', views.WebServerConfigStop.as_view(), name='web_stop'),
-    # path('web/status/', views.WebServerConfigStatus.as_view(), name='web_status'),
+    path('web/status/', views.WebServerConfigStatus.as_view(), name='web_status'),
 
 
     
