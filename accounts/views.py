@@ -142,9 +142,10 @@ class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
 class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView): 
     permission_classes = [IsDhcpManager,]
 
-    def get(self, request):
+    def post(self, request):
         self.check_object_permissions(request , request.user)
         #retrun error if stat_ip and end_ip are not correct
+        # is it correct
         new_start_ip = request.data.startip
         new_end_ip = request.data.endip
         return_data = {}
