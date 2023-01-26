@@ -22,7 +22,7 @@ urlpatterns = [
     path('web/start/', views.WebServerConfigStart.as_view(), name='web_start'),
     path('web/stop/', views.WebServerConfigStop.as_view(), name='web_stop'),
     path('web/status/', views.WebServerConfigStatus.as_view(), name='web_status'),
-    path('Config_get_home_dir/', views.WebServerConfigGetHomeDir, name='get_home_dir'),
+    path('ConfigGetHomeDir/', views.WebServerConfigGetHomeDir.as_view(), name='web_get_home_dir'),
 
 
     
