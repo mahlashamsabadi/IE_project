@@ -61,7 +61,7 @@ class AddUserMail(LoggingMixin ,APIView):
 
 
 class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsDhcpManager,]
+    permission_classes = [IsAdminUser | IsDhcpManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -103,7 +103,7 @@ class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
 
 
 class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsDhcpManager,]
+    permission_classes = [IsAdminUser |IsDhcpManager,]
 
     def get(self, request):
 
@@ -170,7 +170,7 @@ class DhcpConfigStatus(LoggingMixin , generics.GenericAPIView):
 
 # ?
 class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView): 
-    permission_classes = [IsDhcpManager,]
+    permission_classes = [IsAdminUser |IsDhcpManager,]
 
     def post(self, request):
         self.check_object_permissions(request , request.user)
@@ -252,7 +252,7 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
 
 
 class MailConfigStart(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsMailManager,]
+    permission_classes = [IsAdminUser |IsMailManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -275,7 +275,7 @@ class MailConfigStart(LoggingMixin , generics.GenericAPIView):
         return Response(dict_data)
 
 class MailConfigStop(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsMailManager,]
+    permission_classes = [IsAdminUser |IsMailManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -295,7 +295,7 @@ class MailConfigStop(LoggingMixin , generics.GenericAPIView):
 
 
 class MailConfigStatus(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsMailManager,]
+    permission_classes = [IsAdminUser |IsMailManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -365,7 +365,7 @@ class MailConfigStatus(LoggingMixin , generics.GenericAPIView):
         return Response(dict_data)
 
 class WebServerConfigStart(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsWebManager,]
+    permission_classes = [IsAdminUser |IsWebManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -383,7 +383,7 @@ class WebServerConfigStart(LoggingMixin , generics.GenericAPIView):
         return Response(dict_data)
 
 class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsWebManager,]
+    permission_classes = [IsAdminUser |IsWebManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -404,7 +404,7 @@ class WebServerConfigStop(LoggingMixin , generics.GenericAPIView):
 
 
 class WebServerConfigStatus(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsWebManager,]
+    permission_classes = [IsAdminUser |IsWebManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -507,7 +507,7 @@ class WebServerConfigStatus(LoggingMixin , generics.GenericAPIView):
         dict_data = ast.literal_eval(return_data)
 
 class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsWebManager,]
+    permission_classes = [IsAdminUser | IsWebManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -540,7 +540,7 @@ class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
         return Response(dict_data)
 
 class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsWebManager,]
+    permission_classes = [IsAdminUser |IsWebManager,]
 
     def post(self, request):
         self.check_object_permissions(request , request.user)
@@ -604,7 +604,7 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
             new_line = line 
 
             if line.find(current_Dir) != -1:
-                new_line = "/var/www/"+ new_dir ";\n"
+                new_line = "/var/www/"+ new_dir + ";\n"
 
             replaced_content = replaced_content + new_line
         file.close()
