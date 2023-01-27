@@ -9,6 +9,7 @@ from rest_framework import generics
 import sqlite3
 from sqlite3 import Error
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
+from subprocess import Popen, PIPE
 import subprocess
 import json
 import fileinput
@@ -32,6 +33,31 @@ class Register(LoggingMixin ,APIView):
 class CustomTokenObtainPairView(LoggingMixin, TokenObtainPairView):
     # Replace the serializer with your custom
     serializer_class = CustomTokenObtainPairSerializer
+
+class AddUserMail(LoggingMixin ,APIView):
+
+    def post(self, request):
+
+
+        return_data = {}
+        username = request.data["username"]
+        password = request.data["password"]
+
+        cmd1 = 'sudo adduser --gecos "" ' + username
+        output1 = subprocess.run(cmd1, shell=True, capture_output=True, text=True)
+        return_data["addUserOutput"] = output1.stdout
+        return_data["addUserError"] = output1.stderr
+        cmd2 = "sudo passwd -d "+ username
+        subprocess.run(cmd2, shell=True, capture_output=True, text=True)
+        proc=Popen(['sudo', 'passwd', 'soha4'],stdin=PIPE,stdout=PIPE,stderr=PIPE)
+        proc.stdin.write(password+"\n".encode())
+        proc.stdin.write(password.encode())
+        proc.stdin.flush()
+        stdout,stderr = proc.communicate()
+        return_data["addPassOutput"] = stdout
+        return_data["addPassError"] = stderr
+        
+        return Response(return_data)
 
 
 class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
@@ -587,6 +613,9 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
         write_file.write(replaced_content)
         write_file.close()
         return_data["change_directory"] = "the home directory successfully changed!"
+
+        cmd_mail = "mutt -s 'Web server Stopped'  admin@UIIE.LOC <  /var/www/Mails/Mail_Web_Change_dir.txt"
+        output = subprocess.run(cmd_mail, shell=True, capture_output=True, text=True)
 
         return Response(return_data, status=200)
 
