@@ -43,7 +43,7 @@ class AddUserMail(LoggingMixin ,APIView):
         username = request.data["username"]
         password = request.data["password"]
 
-        if username = "" or password = "": 
+        if username == "" or password == "": 
             
             return_data["addUserOutput"] = ""
             return_data["addUserError"] = "invalid value for username or password."
@@ -195,16 +195,16 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
         self.check_object_permissions(request , request.user)
         #retrun error if stat_ip and end_ip are not correct
         # is it correct
-        int_start = int(request.data.startip)
-        int_end = int(request.data.endip)
+        int_start = int(request.data['startip'])
+        int_end = int(request.data['endip'])
         return_data = {}
         if int_start < 1 or int_start > int_end or int_end > 255:
             return_data["change_range"] = "Unacceptable value for IPs"
             return_data = json.dumps(return_data, indent = 4)
             return Response(return_data, status=400)
 
-        new_start_ip = "192.168.10." + request.data.startip
-        new_end_ip = "192.168.10."+ request.data.endip
+        new_start_ip = "192.168.10." + request.data['startip']
+        new_end_ip = "192.168.10."+ request.data['endip']
 
         word = 'range'
         word = word
