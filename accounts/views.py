@@ -486,7 +486,7 @@ class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
     def get(self, request):
         self.check_object_permissions(request , request.user)
         return_data = {}
-        
+        current_Dir = ""
         word = 'root'
 
         with open('/etc/nginx/sites-available/Internet-engineering-proj.conf','r+') as fp:
@@ -494,7 +494,7 @@ class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
             # read all lines in a list
             lines = fp.readlines()
             filedata = fp.read()
-            current_Dir = ""
+            
             for line in lines:
                 # check if string present on a current line
                 s = str(line)
@@ -512,6 +512,79 @@ class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
         dict_data = ast.literal_eval(return_data)
 
         return Response(dict_data)
+
+class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
+    permission_classes = [IsWebManager,]
+
+    def post(self, request):
+        self.check_object_permissions(request , request.user)
+        return_data = {}
+        new_dir = request.data['newDirectory']
+        current_Dir = ""
+        word = 'root'
+
+        with open('/etc/nginx/sites-available/Internet-engineering-proj.conf','r+') as fp:
+
+            # read all lines in a list
+            lines = fp.readlines()
+            filedata = fp.read()
+            for line in lines:
+                # check if string present on a current line
+                s = str(line)
+                if line.find(word) != -1:
+
+                    index = s.find("root ") + 5
+                    
+                    while s[index]!= ";" :
+                        current_Dir += s[index]
+                        index = index+1
+                    break
+
+        
+        Dirs = new_dir.split("/")
+        index = 0
+        first_cd = "/var/www"
+        namoshtarak = ""
+        while current_Dir.find(Dirs[index]) != -1:
+            first_cd = first_cd + "/" + Dirs[index]
+            index += 1
+        first_cd += "/"
+        new_edited_dir = new_dir
+        if index != 0:
+            namoshtarak = Dirs[index]
+            new_edited_dir = ""
+            while index < len(Dirs):
+                new_edited_dir = new_edited_dir + Dirs[index] +"/"
+                index += 1  
+
+            output_cd1 = subprocess.run("cd " + first_cd, shell=True, capture_output=True, text=True)
+            output_mkdir = subprocess.run('mkdir -p '+ new_edited_dir, shell=True, capture_output=True, text=True)
+            if index == 0:
+                output_cp = subprocess.run("sudo cp -r "+ current_Dir+"/!" + " " +"./"+ new_dir, shell=True, capture_output=True, text=True)
+            else:
+                output_cp = subprocess.run("sudo cp -r "+ current_Dir +"/*" + " " +"./"+ new_dir, shell=True, capture_output=True, text=True)
+            output_rm = subprocess.run("sudo rm -rf  "+ current_Dir+"/*" , shell=True, capture_output=True, text=True)
+            output_cd2 = subprocess.run("cd "+ new_dir, shell=True, capture_output=True, text=True)
+            output_chmod= subprocess.run("sudo chmod 777 db.sqlite3 ", shell=True, capture_output=True, text=True)
+
+
+        file = open('/etc/nginx/sites-available/Internet-engineering-proj/Internet-engineering-proj.conf','r+')
+        replaced_content = ""
+        for line in file:
+            new_line = line 
+
+            if line.find(current_Dir) != -1:
+                new_line = "/var/www/"+ new_dir ";\n"
+
+            replaced_content = replaced_content + new_line
+        file.close()
+        write_file = open('/etc/nginx/sites-available/Internet-engineering-proj/Internet-engineering-proj.conf', "w")
+
+        write_file.write(replaced_content)
+        write_file.close()
+        return_data["change_directory"] = "the home directory successfully changed!"
+
+        return Response(return_data, status=200)
 
 class ShowLogs(generics.GenericAPIView):
     permission_classes = [IsAuthenticated ,]
