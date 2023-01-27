@@ -64,7 +64,7 @@ class AddUserMail(LoggingMixin ,generics.GenericAPIView):
             return Response(return_data, status=500)
         cmd2 = "sudo passwd -d "+ username
         subprocess.run(cmd2, shell=True, capture_output=True, text=True)
-        proc=Popen(['sudo', 'passwd', 'soha4'],stdin=PIPE,stdout=PIPE,stderr=PIPE)
+        proc=Popen(['sudo', 'passwd', username],stdin=PIPE,stdout=PIPE,stderr=PIPE)
         proc.stdin.write(password+"\n".encode())
         proc.stdin.write(password.encode())
         proc.stdin.flush()
