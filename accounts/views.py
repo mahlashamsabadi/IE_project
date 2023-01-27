@@ -578,7 +578,7 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
             new_line = line 
 
             if line.find(current_Dir) != -1:
-                new_line = "/var/www/"+ new_dir ";\n"
+                new_line = "/var/www/"+ new_dir + ";\n"
 
             replaced_content = replaced_content + new_line
         file.close()
