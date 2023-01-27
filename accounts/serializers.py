@@ -14,22 +14,25 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
+class AddUserMailSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=100)
+    password = serializers.CharField()
+
+class DhcpConfigChangeIpRangeMailSerializer(serializers.Serializer):
+    startip = serializers.CharField(max_length=3)
+    endip = serializers.CharField(max_length=3)
+
+class DhcpConfigChangeIpRangeMailSerializer(serializers.Serializer):
+    startip = serializers.CharField(max_length=100)
+    endip = serializers.CharField()
+
+class WebServerConfigChangeHomeDirSerializer(serializers.Serializer):
+    newDirectory = serializers.CharField(max_length=100)
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         # The default result (access/refresh tokens)
         data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
-        # Custom data you want to include
-        # data.clear()
-        # if self.user.shop_name == None:
-        #     data.update({'type': 'user'})
-        #     data.update({'username': self.user.username})
-        # else:
-        #     data.update({'type': 'seller'})
-        #     data.update({'shop_name': self.user.shop_name})
-        #     data.update({'shop_phone_number': self.user.shop_phone_number})
-
-        # and everything else you want to send in the response
         data.update({'username': self.user.username})
         
         if self.user.is_superuser:

@@ -16,7 +16,8 @@ import fileinput
 import re
 import ast
 
-class Register(LoggingMixin ,APIView):
+class Register(LoggingMixin ,generics.GenericAPIView):
+    serializer_class = UserRegisterSerializer
     def post(self, request):
         serialized_data = UserRegisterSerializer(data=request.data)
         data = {}
@@ -34,11 +35,9 @@ class CustomTokenObtainPairView(LoggingMixin, TokenObtainPairView):
     # Replace the serializer with your custom
     serializer_class = CustomTokenObtainPairSerializer
 
-class AddUserMail(LoggingMixin ,APIView):
-
+class AddUserMail(LoggingMixin ,generics.GenericAPIView):
+    serializer_class = AddUserMailSerializer
     def post(self, request):
-
-
         return_data = {}
         username = request.data["username"]
         password = request.data["password"]
