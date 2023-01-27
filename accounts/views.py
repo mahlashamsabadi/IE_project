@@ -528,7 +528,7 @@ class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsAdminUser | IsWebManager,]
 
     def get(self, request):
-        self.check_object_permissions(request , request.user)
+        self.check_object_permissions(request, request.user)
         return_data = {}
         current_Dir = ""
         word = 'root'
@@ -616,7 +616,7 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
             output_chmod= subprocess.run("sudo chmod 777 db.sqlite3 ", shell=True, capture_output=True, text=True)
 
 
-        file = open('/etc/nginx/sites-available/Internet-engineering-proj/Internet-engineering-proj.conf','r+')
+        file = open('/etc/nginx/sites-available/Internet-engineering-proj.conf','r+')
         replaced_content = ""
         for line in file:
             new_line = line 
@@ -626,7 +626,7 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
 
             replaced_content = replaced_content + new_line
         file.close()
-        write_file = open('/etc/nginx/sites-available/Internet-engineering-proj/Internet-engineering-proj.conf', "w")
+        write_file = open('/etc/nginx/sites-available/Internet-engineering-proj.conf', "w")
 
         write_file.write(replaced_content)
         write_file.close()
