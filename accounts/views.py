@@ -43,10 +43,26 @@ class AddUserMail(LoggingMixin ,APIView):
         username = request.data["username"]
         password = request.data["password"]
 
+        if username = "" or password = "": 
+            
+            return_data["addUserOutput"] = ""
+            return_data["addUserError"] = "invalid value for username or password."
+            return Response(return_data,status=400)
+
+        if username[0].isdigit():
+
+            return_data["addUserOutput"] = ""
+            return_data["addUserError"] = "The username cannot start with a number."
+            return Response(return_data,status=400)
+
         cmd1 = 'sudo adduser --gecos "" ' + username
         output1 = subprocess.run(cmd1, shell=True, capture_output=True, text=True)
         return_data["addUserOutput"] = output1.stdout
         return_data["addUserError"] = output1.stderr
+        if return_data["addUserError"].find("already exists.") != -1:
+            return Response(return_data, status = 400)
+        if return_data["addUserError"] != "":
+            return Response(return_data, status=500)
         cmd2 = "sudo passwd -d "+ username
         subprocess.run(cmd2, shell=True, capture_output=True, text=True)
         proc=Popen(['sudo', 'passwd', 'soha4'],stdin=PIPE,stdout=PIPE,stderr=PIPE)
@@ -56,8 +72,11 @@ class AddUserMail(LoggingMixin ,APIView):
         stdout,stderr = proc.communicate()
         return_data["addPassOutput"] = stdout
         return_data["addPassError"] = stderr
+
+        if return_data["addPassError"] != "":
+            return Response(return_data, status=500)
         
-        return Response(return_data)
+        return Response(return_data, status=200)
 
 
 class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
@@ -182,7 +201,7 @@ class DhcpConfigChangeIpRange(LoggingMixin , generics.GenericAPIView):
         if int_start < 1 or int_start > int_end or int_end > 255:
             return_data["change_range"] = "Unacceptable value for IPs"
             return_data = json.dumps(return_data, indent = 4)
-            return Response(return_data, status=406)
+            return Response(return_data, status=400)
 
         new_start_ip = "192.168.10." + request.data.startip
         new_end_ip = "192.168.10."+ request.data.endip
