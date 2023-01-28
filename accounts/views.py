@@ -601,19 +601,15 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
                 new_edited_dir = new_edited_dir + Dirs[index] +"/"
                 index += 1  
 
-            output_cd1 = subprocess.run("cd " + first_cd, shell=True, capture_output=True, text=True)
-            output_mkdir = subprocess.run('mkdir -p '+ new_edited_dir, shell=True, capture_output=True, text=True)
-            if index == 0:
-                output_cp = subprocess.run("sudo cp -r "+ current_Dir+"/!" + " " +"./"+ new_dir, shell=True, capture_output=True, text=True)
-            else:
-                output_cp = subprocess.run("sudo cp -r "+ current_Dir +"/!("+namoshtarak+")" + " " +"./"+ new_edited_dir, shell=True, capture_output=True, text=True)
-            if index == 0:
-                output_rm = subprocess.run("sudo rm -rf  "+ current_Dir+"/*" , shell=True, capture_output=True, text=True)
-            else:
-                output_rm = subprocess.run("sudo rm -rf -v "+ current_Dir+"/!("+namoshtarak+")" , shell=True, capture_output=True, text=True)
+        output_cd1 = subprocess.run("cd " + first_cd, shell=True, capture_output=True, text=True)
+        output_mkdir = subprocess.run('mkdir -p '+ new_edited_dir, shell=True, capture_output=True, text=True)
+        if index == 0:
+            output_cp = subprocess.run("sudo cp -r "+ current_Dir+"/!" + " " +"./"+ new_dir, shell=True, capture_output=True, text=True)
+        else:
+            output_cp = subprocess.run("sudo cp -r "+ current_Dir +"/!("+namoshtarak+")" + " " +"./"+ new_edited_dir, shell=True, capture_output=True, text=True)
 
-            output_cd2 = subprocess.run("cd "+ new_edited_dir, shell=True, capture_output=True, text=True)
-            output_chmod= subprocess.run("sudo chmod 777 db.sqlite3 ", shell=True, capture_output=True, text=True)
+        output_cd2 = subprocess.run("cd "+ new_edited_dir, shell=True, capture_output=True, text=True)
+        output_chmod= subprocess.run("sudo chmod 777 db.sqlite3 ", shell=True, capture_output=True, text=True)
 
 
         file = open('/etc/nginx/sites-available/Internet-engineering-proj.conf','r+')
