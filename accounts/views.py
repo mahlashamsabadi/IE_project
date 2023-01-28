@@ -99,7 +99,7 @@ class DhcpConfigStart(LoggingMixin , generics.GenericAPIView):
         return Response(dict_data)
 
 class DhcpConfigStop(LoggingMixin , generics.GenericAPIView):
-    permission_classes = [IsDhcpManager,]
+    permission_classes = [IsAdminUser | IsDhcpManager,]
 
     def get(self, request):
         self.check_object_permissions(request , request.user)
@@ -523,6 +523,8 @@ class WebServerConfigStatus(LoggingMixin , generics.GenericAPIView):
 
         return_data = json.dumps(return_data, indent = 4)
         dict_data = ast.literal_eval(return_data)
+        return Response(dict_data)
+    
 
 class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
     permission_classes = [IsAdminUser | IsWebManager,]
@@ -533,7 +535,7 @@ class WebServerConfigGetHomeDir(LoggingMixin , generics.GenericAPIView):
         current_Dir = ""
         word = 'root'
 
-        with open('/etc/nginx/sites-available/Internet-engineering-proj.conf','r+') as fp:
+        with open('/etc/nginx/sites-available/IEProject','r+') as fp:
 
             # read all lines in a list
             lines = fp.readlines()
@@ -567,7 +569,7 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
         current_Dir = ""
         word = 'root'
 
-        with open('/etc/nginx/sites-available/Internet-engineering-proj.conf','r+') as fp:
+        with open('/etc/nginx/sites-available/IEProject','r+') as fp:
 
             # read all lines in a list
             lines = fp.readlines()
@@ -612,7 +614,7 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
         output_chmod= subprocess.run("sudo chmod 777 db.sqlite3 ", shell=True, capture_output=True, text=True)
 
 
-        file = open('/etc/nginx/sites-available/Internet-engineering-proj.conf','r+')
+        file = open('/etc/nginx/sites-available/IEProject','r+')
         replaced_content = ""
         for line in file:
             new_line = line 
@@ -622,7 +624,7 @@ class WebServerConfigChangeHomeDir(LoggingMixin , generics.GenericAPIView):
 
             replaced_content = replaced_content + new_line
         file.close()
-        write_file = open('/etc/nginx/sites-available/Internet-engineering-proj.conf', "w")
+        write_file = open('/etc/nginx/sites-available/IEProject', "w")
 
         write_file.write(replaced_content)
         write_file.close()
